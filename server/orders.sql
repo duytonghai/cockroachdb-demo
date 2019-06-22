@@ -1,3 +1,5 @@
+-- cockroach sql --insecure --database=startrek --user=maxroach < orders.sql
+
 create table orders (
 	id INT,
 	user_id INT,

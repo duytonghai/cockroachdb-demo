@@ -1,8 +1,11 @@
+-- cockroach sql --insecure --database=startrek --user=maxroach < products.sql
+
 create table products (
 	id INT,
 	name VARCHAR(50),
 	quantity INT
 );
+
 insert into products (id, name, quantity) values (1, 'Flour - Teff', 77);
 insert into products (id, name, quantity) values (2, 'Lid Coffee Cup 8oz Blk', 21);
 insert into products (id, name, quantity) values (3, 'Cake - Bande Of Fruit', 88);
