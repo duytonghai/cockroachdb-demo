@@ -1,4 +1,5 @@
 /cockroach-data
+/node_modules
 .idea/misc.xml
 .idea/
 .env

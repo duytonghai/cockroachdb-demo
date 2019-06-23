@@ -4,6 +4,10 @@ var cookieParser = require('cookie-parser');
 var cors = require('cors');
 var logger = require('morgan');
 
+require("@babel/register")({
+  presets: ["@babel/preset-env"]
+});
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var productsRouter = require('./routes/products');
