@@ -16,7 +16,7 @@ export class ProductList extends React.Component {
     const rows = []
 
     productList.map(product => {
-      rows.push(
+      return rows.push(
         <tr key={product.id}>
           <td>{product.id}</td>
           <td>{product.name}</td>

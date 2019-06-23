@@ -1,5 +1,3 @@
-import get from 'lodash/get'
-
 import * as API from '../../../api/products';
 
 import * as actionConstants from './actionConstants'

@@ -5,10 +5,6 @@ import { Link } from 'react-router-dom'
 import ProductListContainer from './products/ProductListContainer'
 
 export class AppDashboard extends React.Component {
-  constructor (props) {
-    super(props)
-  }
-
   componentDidMount () {
   }
 

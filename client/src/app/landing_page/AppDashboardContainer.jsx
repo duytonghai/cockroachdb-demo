@@ -1,7 +1,5 @@
 import { connect } from 'react-redux'
 import camelCase from 'lodash/camelCase'
-import reduce from 'lodash/reduce'
-import get from 'lodash/get'
 
 import AppDashboard from './AppDashboard'
 
