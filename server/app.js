@@ -11,8 +11,10 @@ require("@babel/register")({
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var productsRouter = require('./routes/products');
+var ordersRouter = require('./routes/orders');
 
 var app = express();
+const PORT = process.env.PORT || 3000
 
 app.use(cors({origin: '*'}));
 
@@ -25,5 +27,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/products', productsRouter);
+app.use('/orders', ordersRouter);
+
+// For debug
+// app.listen(PORT, () => console.log(`App listening on *:${PORT}`))
 
 module.exports = app;
