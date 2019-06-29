@@ -77,6 +77,62 @@ function txnWrapper(client, op, next) {
   });
 }
 
+function txnWrapperUsingPromise(client, op, next) {
+  client.query('BEGIN; SAVEPOINT cockroach_restart', function (err) {
+      if (err) {
+          return next(err);
+      }
+
+      var released = false;
+
+      var promise1 = new Promise(function(resolve, reject) {
+        var handleError = function (err) {
+          // If we got an error, see if it's a retryable one
+          // and, if so, restart.
+          if (err.code === '40001') {
+              // Signal the database that we'll retry.
+              return client.query('ROLLBACK TO SAVEPOINT cockroach_restart', reject);
+          }
+          // A non-retryable error; break out of the
+          // doWhilst with an error.
+          return reject(err);
+        };
+
+        // Attempt the work.
+        op(client, function (err) {
+          if (err) {
+            return handleError(err);
+          }
+          var opResults = arguments;
+
+          // If we reach this point, release and commit.
+          client.query('RELEASE SAVEPOINT cockroach_restart;', function (err) {
+            if (err) {
+              return handleError(err);
+            }
+            released = true;
+            return resolve(opResults);
+          });
+        });
+      });
+
+      promise1.then(function(value) {
+        var txnResults = arguments;
+        client.query('COMMIT', function (err) {
+          if (err) {
+            return next(err);
+          } else {
+            return next.apply(null, txnResults);
+          }
+        });
+      }, function(e) {
+        client.query('ROLLBACK', function () {
+          return next(e);
+        });
+      });
+  });
+}
+
 // The checkout transaction we will run
 function checkout(client, user_id, product_id, qty, next) {
     // Check the current quantity.
@@ -87,7 +143,7 @@ function checkout(client, user_id, product_id, qty, next) {
       if (err) {
         return next(err);
       } else if (results.rows.length === 0) {
-        return next(new Error('account not found in table'));
+        return next(new Error('products not found in table'));
       }
 
       var acctQty = results.rows[0].quantity;
@@ -137,22 +193,22 @@ router.post('/', function(req, res) {
     }
 
     // Execute the transaction.
-    txnWrapper(client,
+    txnWrapperUsingPromise(client,
       function (client, next) {
         checkout(client, user_id, product_id, quantity, next);
       },
       function (err, results) {
-        if (err) {
+        if (err instanceof Error) {
           console.error('error performing transaction', err);
-          finish();
+
+          res.status(400);
+          res.json({
+            'error': err.message
+          });
+        } else {
+          res.status(200);
+          res.json(err[1].shift());
         }
-
-        console.log('Balances after transfer:');
-        // results.forEach(function (result) {
-        //   console.log(result);
-        // });
-
-        res.json(results);
 
         finish();
       });

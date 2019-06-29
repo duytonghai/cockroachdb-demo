@@ -30,6 +30,6 @@ app.use('/products', productsRouter);
 app.use('/orders', ordersRouter);
 
 // For debug
-// app.listen(PORT, () => console.log(`App listening on *:${PORT}`))
+//app.listen(PORT, () => console.log(`App listening on *:${PORT}`))
 
 module.exports = app;
