@@ -143,7 +143,7 @@ function checkout(client, user_id, product_id, qty, next) {
       if (err) {
         return next(err);
       } else if (results.rows.length === 0) {
-        return next(new Error('products not found in table'));
+        return next(new Error('product not found in table'));
       }
 
       var acctQty = results.rows[0].quantity;
@@ -180,6 +180,21 @@ router.post('/', function(req, res) {
   var user_id = req.body.user_id;
   var product_id = req.body.product_id;
   var quantity = req.body.quantity;
+
+  console.log('------------ POST DATA ----------------------');
+  console.log('user_id: ', user_id);
+  console.log('product_id: ', product_id);
+  console.log('quantity: ', quantity);
+  console.log('---------------------------------------------');
+
+  if (!user_id || !product_id || !quantity) {
+    res.status(400);
+    res.json({
+      'error': 'Please check your input data!'
+    });
+    return;
+  }
+
 
   pool.connect(function (err, client, done) {
     // Closes communication with the database and exits.
