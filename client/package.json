@@ -10,7 +10,7 @@
     "classnames": "^2.2.5",
     "fetch-ponyfill": "^6.1.0",
     "immutable": "^3.8.2",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.21",
     "moment-timezone": "^0.5.16",
     "prop-types": "^15.6.1",
     "react": "^16.8.6",
