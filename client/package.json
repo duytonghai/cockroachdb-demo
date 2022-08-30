@@ -11,7 +11,7 @@
     "fetch-ponyfill": "^6.1.0",
     "immutable": "^3.8.2",
     "lodash": "^4.17.10",
-    "moment-timezone": "^0.5.16",
+    "moment-timezone": "^0.5.35",
     "prop-types": "^15.6.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
